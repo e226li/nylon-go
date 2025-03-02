@@ -33,18 +33,8 @@ func NameValidator(s string) error {
 	return nil
 }
 
-func BindValidator(s string) error {
-	_, err := netip.ParseAddrPort(s)
-	return err
-}
-
 func PortValidator(s string) error {
 	_, err := strconv.ParseUint(s, 10, 16)
-	return err
-}
-
-func AddrValidator(s string) error {
-	_, err := netip.ParseAddr(s)
 	return err
 }
 
@@ -118,7 +108,7 @@ func CentralConfigValidator(cfg *CentralCfg) error {
 
 	for domain, node := range cfg.Hosts {
 		if !slices.Contains(nodes, node) {
-			return fmt.Errorf("destination node %s not found for %s", node, domain)
+			return fmt.Errorf("destination node %s not found for %s. nodes: %v", node, domain, nodes)
 		}
 		if slices.Contains(nodes, domain) {
 			return fmt.Errorf("domain name %s cannot be the same name as node %s", domain, node)
