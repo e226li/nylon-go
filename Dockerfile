@@ -4,7 +4,9 @@ WORKDIR /src
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -o /nylon .
 
-FROM scratch
+# nylon configures its interface with ip from iproute2
+FROM alpine:3.24 AS release
+RUN apk add --no-cache iproute2
 
 # Copy binary from builder
 COPY --from=builder /nylon /usr/local/bin/nylon
